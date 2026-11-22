@@ -3,7 +3,12 @@ const getBtn = document.getElementById("get-btn");
 const getStatus = document.getElementById("status");
 const recipeArea = document.getElementById("recipe");
 
+const dishInput = document.getElementById("dish-name");
+const postBtn = document.getElementById("post-btn");
+const postStatus = document.getElementById("post-status");
+const savedArea = document.getElementById("saved");
 
+// GET 
 async function getRecipe() {
     recipeArea.textContent = "";
 
@@ -35,3 +40,24 @@ async function getRecipe() {
 }
 
 getBtn.addEventListener("click", getRecipe);
+
+// POST - add a dish
+async function addDish() {
+    const response = await fetch("https://dummyjson.com/recipes/add", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ name: dishInput.value })
+    });
+
+    const newDish = await response.json();
+    console.log(newDish);
+
+    const message = document.createElement("p");
+    message.className = "alert alert-success";
+    message.textContent = `Added ${newDish.name} as recipe #${newDish.id} (PRACTICE SERVER - not really saved)`;
+    savedArea.appendChild(message);
+
+    dishInput.value = "";
+}
+
+postBtn.addEventListener("click", addDish);
